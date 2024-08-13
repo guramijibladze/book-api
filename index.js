@@ -1,10 +1,23 @@
 const express = require('express')
+const mongoose = require('mongoose');
 const app = express()
 
-app.listen(3000, () => {
-    console.log('Server is running on port 3000')
-})
+
 
 app.get('/', (req, res) => {
     res.send('Hello from Node API')
 })
+
+mongoose.connect('mongodb+srv://admin:xyokGYExe8p1ZVV4@backendbookdb.odpy3.mongodb.net/Node-API?retryWrites=true&w=majority&appName=BackendBookDB')
+  .then(() => {
+    console.log('Connected!')
+    app.listen(3000, () => {
+        console.log('Server is running on port 3000')
+    })
+  })
+  .catch(() => {
+    console.log('Connection failed!!!')
+  })
+
+// Password:xyokGYExe8p1ZVV4
+// Username:admin
