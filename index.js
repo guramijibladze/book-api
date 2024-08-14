@@ -1,12 +1,14 @@
 const express = require('express')
 const mongoose = require('mongoose');
+const Book = require('./models/books.model.js')
+const bookRoute = require('./routes/book.route.js')
 const app = express()
 
+//middleware
+app.use(express.json())
 
-
-app.get('/', (req, res) => {
-    res.send('Hello from Node API')
-})
+//routes
+app.use('/api/books', bookRoute)
 
 mongoose.connect('mongodb+srv://admin:xyokGYExe8p1ZVV4@backendbookdb.odpy3.mongodb.net/Node-API?retryWrites=true&w=majority&appName=BackendBookDB')
   .then(() => {
