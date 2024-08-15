@@ -2,11 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose');
 const app = express()
 const bookRoute = require('./routes/book.route.js')
-// const Book = require('./models/books.model.js')
-// const bcrypt = require('bcryptjs');
-// const jwt = require('jsonwebtoken');
-// const { body, validationResult } = require('express-validator');
-// require('dotenv').config();
+
 
 
 //middleware

@@ -1,4 +1,5 @@
 const Book = require('../models/books.model')
+const auth = require('../controllers/register-login.controller')
 
 const createBook = async(req, res) => {
     try {
@@ -10,7 +11,7 @@ const createBook = async(req, res) => {
 }
 
 const getAllBooks = async(req, res) => {
-    console.log('guram')
+  
     try {
         const books = await Book.find({})
         res.status(200).json(books)

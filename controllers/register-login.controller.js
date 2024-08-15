@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 const { body, validationResult } = require('express-validator');
 require('dotenv').config();
 
+const JWT_SECRET = 'your_secret_key_here';
+
 const register = async(req, res) => {
     try {
         const {email, password} = req.body;
@@ -34,7 +36,7 @@ const userLogin = async(req, res) => {
         console.log('Password matched, generating token');
         console.log('JWT_SECRET:', process.env.JWT_SECRET);
       
-        const JWT_SECRET = 'your_secret_key_here';
+        
         const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' });
         console.log('Token generated successfully');
         res.json({ token });
@@ -45,4 +47,21 @@ const userLogin = async(req, res) => {
     }
 }
 
-module.exports = {register, userLogin}
+const auth = (req, res, next) => {
+    try {
+        
+        const token = req.header('Authorization').replace('Bearer ', '');
+        const decoded = jwt.verify(token, JWT_SECRET);
+        req.userId = decoded.userId;
+        next();
+    } catch (error) {
+        res.status(401).json({ message: 'Please authenticate' });
+    }
+}
+
+module.exports = {
+    register, 
+    userLogin,
+    auth 
+}
+
