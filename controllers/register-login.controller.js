@@ -8,13 +8,20 @@ const JWT_SECRET = 'your_secret_key_here';
 
 const register = async(req, res) => {
     try {
-        const {email, password} = req.body;
+        const {name, email, password, repeatPassword } = req.body;
+
+        if( password != repeatPassword ){
+            return res.status(400).json({message: 'Password do not match!!!'})
+        } 
+          
+        // პაროლის ჰეშირება
         const hashedPassword = await bcrypt.hash(password, 10);
-        const user = new User({ email, password: hashedPassword });
+
+        const user = new User({name, email, password: hashedPassword });
         await user.save();
         res.status(201).json({ message: 'User created successfully' });
     } catch (error) {
-        res.status(500).json({ message: 'Error creating user' });
+        res.status(500).json({ message: error.message });
     }
 }
 
@@ -33,9 +40,7 @@ const userLogin = async(req, res) => {
             return res.status(400).json({ message: 'Invalid credentials' });
         }
 
-        console.log('Password matched, generating token');
-        console.log('JWT_SECRET:', process.env.JWT_SECRET);
-      
+        // console.log('Password matched, generating token');
         
         const token = jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: '1h' });
         console.log('Token generated successfully');
@@ -49,7 +54,6 @@ const userLogin = async(req, res) => {
 
 const auth = (req, res, next) => {
     try {
-        
         const token = req.header('Authorization').replace('Bearer ', '');
         const decoded = jwt.verify(token, JWT_SECRET);
         req.userId = decoded.userId;
@@ -59,9 +63,22 @@ const auth = (req, res, next) => {
     }
 }
 
+
 module.exports = {
     register, 
     userLogin,
     auth 
 }
 
+
+// {
+//    "name": "jibsi",
+//    "email": "jibsitest@test.com",
+//    "password": "jibsigurami123456",
+//    "repeatPassword": "jibsigurami123456"
+// }
+
+// {
+// 	"email": "test@test.com",
+// 	"password": "gurami123456"
+// }
