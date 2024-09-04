@@ -13,8 +13,15 @@ const createBook = async(req, res) => {
 const getAllBooks = async(req, res) => {
   
     try {
-        const books = await Book.find({})
-        res.status(200).json(books)
+        console.log(req.query.page)
+        let page = req.query.page;
+        let limit = req.query.limit;
+        let skip = (page - 1) * limit
+
+        const totalBooks = await Book.countDocuments({});
+
+        const books = await Book.find({}).skip(skip).limit(limit)
+        res.status(200).json({books, totalBooks, page, limit })
     } catch (error) {
         res.status(500).json({message: error.message})
     }

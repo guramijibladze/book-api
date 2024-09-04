@@ -9,8 +9,8 @@ router.post('/createUser', register);
 router.post('/login', userLogin);
 router.post('/', auth, createBook);
 
-router.get('/', getAllBooks);
-router.get('/:id', getOneBook);
+router.get('/',auth, getAllBooks);
+router.get('/:id',auth, getOneBook);
 
 router.put('/:id', auth, updateBook);
 
